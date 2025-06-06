@@ -21,7 +21,7 @@
 
 int cmpdir(char *src_name, char *dst_name);
 
-void copyfile(char *src_name, char *dst_name, struct utimbuf times, size_t sz) {
+void copyfile(char *src_name, char *dst_name) {
   char cmd[CMD_GIO_CP_MAX_SZ] = {0};
   int ret;
 
@@ -45,7 +45,6 @@ void copyfile(char *src_name, char *dst_name, struct utimbuf times, size_t sz) {
 
 void cmpfile(char *src_name, char *dst_name) {
   struct stat src_sb, dst_sb;
-  struct utimbuf times;
   int ret;
 
   ret = stat(src_name, &src_sb);
@@ -57,19 +56,16 @@ void cmpfile(char *src_name, char *dst_name) {
   if (S_IFREG != (src_sb.st_mode & S_IFMT))
     return;
 
-  times.actime = src_sb.st_atime;
-  times.modtime = src_sb.st_mtime;
-
   ret = stat(dst_name, &dst_sb);
   if(-1 == ret) {
-    copyfile(src_name, dst_name, times, src_sb.st_size);
+    copyfile(src_name, dst_name);
     return;
   }
 
   if (difftime(src_sb.st_mtime, dst_sb.st_mtime) <= 0)
     return;
 
-  copyfile(src_name, dst_name, times, src_sb.st_size);
+  copyfile(src_name, dst_name);
 
 }
 

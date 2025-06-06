@@ -29,7 +29,7 @@ void copyfile(char *src_name, char *dst_name) {
 
   ret = snprintf(cmd, 
       CMD_GIO_CP_MAX_SZ, 
-      "gio copy %s \"%s\"", 
+      "gio copy \"%s\" \"%s\"", 
       src_name, 
       dst_name);
 
@@ -37,7 +37,7 @@ void copyfile(char *src_name, char *dst_name) {
     printf("FAIL, filename too long.\n");
     return;
   }
-  
+
   system(cmd);
 
   printf("DONE.\n");
